@@ -1,5 +1,26 @@
+ /**
+ * UtilityService class provides utility methods for projects, including namespace handling.
+ * 
+ * @author Remigiusz Wojciekian
+ * @version 1.0
+ * 
+ * @date 2026-07-07
+*/
 public with sharing class UtilityService {
-    public UtilityService() {
+
+    @TestVisible
+    private static String namespaceOverride;
+
+    public UtilityService() {}
+
+    private static String getNamespace() {
+        if (Test.isRunningTest() && namespaceOverride != null) {
+            return namespaceOverride;
+        }
+
+        return UtilityService.class.getName()
+            .substringBefore('UtilityService')
+            .removeEnd('.');
     }
 
     private static final String CLASS_NAME = 'UtilityService';
@@ -14,7 +35,7 @@ public with sharing class UtilityService {
      * @return Namespace name or an empty string if no namespace exists.
      */
     public static String getNamespaceWithoutUnderscores() {
-        return NAMESPACE;
+        return getNamespace();
     }
 
     /**
@@ -25,7 +46,8 @@ public with sharing class UtilityService {
      * @return Namespace with trailing dot.
      */
     public static String getNamespaceWithDot() {
-        return String.isBlank(NAMESPACE) ? '' : NAMESPACE + '.';
+        String namespace = getNamespace();
+        return String.isBlank(namespace) ? '' : namespace + '.';
     }
 
     /**
@@ -36,6 +58,7 @@ public with sharing class UtilityService {
      * @return Namespace with trailing underscores.
      */
     public static String getNamespaceWithUnderscores() {
-        return String.isBlank(NAMESPACE) ? '' : NAMESPACE + '__';
+        String namespace = getNamespace();
+        return String.isBlank(namespace) ? '' : namespace + '__';
     }
 }
