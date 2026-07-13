@@ -25,7 +25,7 @@
  * 
  * @date 2026-07-10
  */
-public with sharing class Logger {
+public without sharing class Logger {
 
     public enum LogLevel { ERROR, WARN, INFO, DEBUG, FINE }
 
@@ -47,7 +47,8 @@ public with sharing class Logger {
             // e.g. in a fresh scratch org before data is deployed.
             mdt = new LoggerSettings__mdt(
                 Is_Enabled__c = true,
-                Purge_After_Days__c = 30
+                Purge_After_Days__c = 30,
+                Enable_Pruning__c = false
             );
         }
         return mdt;
