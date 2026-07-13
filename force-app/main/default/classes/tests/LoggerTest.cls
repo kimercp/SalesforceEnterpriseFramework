@@ -67,7 +67,8 @@ private class LoggerTest {
         Logger.reset();
         Logger.settings = new LoggerSettings__mdt(
             Is_Enabled__c = false,
-            Purge_After_Days__c = 30
+            Purge_After_Days__c = 30,
+            Enable_Pruning__c = false
         );
 
         Test.startTest();

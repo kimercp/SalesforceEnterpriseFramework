@@ -12,7 +12,7 @@
  * 
  * @date 2026-07-10
  */
-public with sharing class LoggerQueueable implements Queueable {
+public without sharing class LoggerQueueable implements Queueable {
 
     private List<Log__c> logsToInsert;
 
