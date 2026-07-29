@@ -29,46 +29,39 @@ node {
     // JWT key credentials.
     // -------------------------------------------------------------------------
 
- 	withEnv(["HOME=${env.WORKSPACE}"]) {	
+ 	// withEnv(["HOME=${env.WORKSPACE}"]) {	
 	
 	    withCredentials([file(credentialsId: SERVER_KEY_CREDENTIALS_ID, variable: 'server_key_file')]) {
 		// -------------------------------------------------------------------------
 		// Authenticate to Salesforce using the server key.
 		// -------------------------------------------------------------------------
 
-		stage('Authorize to Salesforce') {
-            echo 'Authenticating to Salesforce org using JWT...'
-			rc = command "${toolbelt}/sfdx auth:jwt:grant --instanceurl ${SF_INSTANCE_URL} --clientid ${SF_CONSUMER_KEY} --jwtkeyfile ${server_key_file} --username ${SF_USERNAME} --setalias UAT"
-		    if (rc != 0) {
-			error 'Salesforce org authorization failed.'
-		    }
+		stage('Authorize DevHub') {
+			echo 'Authenticating to Salesforce org using JWT'
+    		rc = command "${toolbelt}/sf org login jwt --instance-url ${SF_INSTANCE_URL} --client-id ${SF_CONSUMER_KEY} --username ${SF_USERNAME} --jwt-key-file ${server_key_file} --set-default-dev-hub --alias HubOrg"
+    		if (rc != 0) {
+        		error 'Salesforce dev hub org authorization failed.'
+    		}
 		}
 
-
 		// -------------------------------------------------------------------------
-		// Deploy metadata and execute unit tests.
+		// Create new scratch org to test code
 		// -------------------------------------------------------------------------
-
-		stage('Deploy and Run Tests') {
-		    rc = command "${toolbelt}/sfdx force:mdapi:deploy --wait 10 --deploydir ${DEPLOYDIR} --targetusername UAT --testlevel ${TEST_LEVEL}"
-		    if (rc != 0) {
-			error 'Salesforce deploy and test run failed.'
-		    }
+		stage('Create Test Scratch Org') {
+    		rc = command "${toolbelt}/sf org create scratch --target-dev-hub HubOrg --set-default --definition-file config/project-scratch-def.json --alias ciorg --wait 10 --duration-days 1"
+    		if (rc != 0) {
+        		error 'Salesforce test scratch org creation failed.'
+    		}
 		}
 
-
-		// -------------------------------------------------------------------------
-		// Example shows how to run a check-only deploy.
-		// -------------------------------------------------------------------------
-
-		//stage('Check Only Deploy') {
-		//    rc = command "${toolbelt}/sfdx force:mdapi:deploy --checkonly --wait 10 --deploydir ${DEPLOYDIR} --targetusername UAT --testlevel ${TEST_LEVEL}"
-		//    if (rc != 0) {
-		//        error 'Salesforce deploy failed.'
-		//    }
-		//}
+		stage('Push To Test Scratch Org') {
+    		rc = command "${toolbelt}/sf project deploy start --target-org ciorg"
+    		if (rc != 0) {
+        		error 'Salesforce push to test scratch org failed.'
+    		}
+		}
 	    }
-	}
+	// }
 }
 
 def command(script) {
