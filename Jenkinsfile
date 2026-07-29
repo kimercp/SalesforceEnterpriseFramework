@@ -2,9 +2,11 @@ pipeline {
     agent any
 
     stages {
-        stage('Hello') {
+        stage('Check SF CLI and update') {
             steps {
-                echo 'Hello World'
+                sh '''
+                    sf --version
+                '''
             }
         }
     }
