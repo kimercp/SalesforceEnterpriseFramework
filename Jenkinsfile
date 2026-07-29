@@ -16,6 +16,22 @@ node {
     stage('Checkout') {
         echo 'Checking out source code from SCM...'
         checkout scm
+		echo "SF_JWT_KEY=${env.SF_JWT_KEY}"
+		echo "SF_CLIENT_ID=${env.SF_CLIENT_ID}"
+		echo "SF_USERNAME=${env.SF_USERNAME}"
+		echo "SF_INSTANCE_URL=${env.SF_INSTANCE_URL}"
+    }
+
+	stage('Validate Env') {
+        def missing = []
+        if (!SF_CONSUMER_KEY)          missing << 'SF_CLIENT_ID'
+        if (!SF_USERNAME)              missing << 'SF_USERNAME'
+        if (!SERVER_KEY_CREDENTIALS_ID) missing << 'SF_JWT_KEY'
+
+        if (missing) {
+            error "Brakuje wymaganych zmiennych środowiskowych: ${missing.join(', ')}. " +
+                  "Ustaw je w konfiguracji joba/pipeline'u (Environment lub credentials binding)."
+        }
     }
 
     stage('Verify SF CLI') {
