@@ -22,13 +22,7 @@ node {
     stage('Authenticate to Salesforce') {
         echo 'Authenticating to Salesforce org using JWT...'
         sh '''
-            sf org login jwt \
-            --client-id "$SF_CLIENT_ID" \
-            --jwt-key-file "$SF_JWT_KEY" \
-            --username "$SF_USERNAME" \
-            --instance-url "$SF_INSTANCE_URL" \
-            --alias ci-org \
-            --set-default
+            sf org login jwt --instance-url ${SF_INSTANCE_URL} --client-id ${SF_CLIENT_ID} --username ${SF_USERNAME} --jwt-key-file ${SF_JWT_KEY} --set-default --alias ciorg"
         '''
     }
 }
