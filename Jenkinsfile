@@ -9,40 +9,26 @@ node {
     def SF_INSTANCE_URL='https://login.salesforce.com'    // test.salesforce.com dla sandboxa
     def SF_JWT_KEY=env.SF_JWT_KEY //     = credentials('sf-jwt-key-file')     // Secret file z private key
 
-    //def SF_CONSUMER_KEY=env.SF_CONSUMER_KEY
-    //def SF_USERNAME=env.SF_USERNAME
-    //def SERVER_KEY_CREDENTALS_ID=env.SERVER_KEY_CREDENTALS_ID
-    //def TEST_LEVEL='RunLocalTests'
-    //def PACKAGE_NAME='0Ho1U000000CaUzSAK'
-    //def PACKAGE_VERSION
-    //def SF_INSTANCE_URL = env.SF_INSTANCE_URL ?: "https://login.salesforce.com"
-
-    //def toolbelt = tool 'toolbelt'
-
-
-    // -------------------------------------------------------------------------
-    // Check out code from source control.
-    // -------------------------------------------------------------------------
-
     stage('Checkout') {
-            steps {
-                echo 'Checking out source code from SCM...'
-                checkout scm
-            }
-        }
+        echo 'Checking out source code from SCM...'
+        checkout scm
+    }
 
     stage('Verify SF CLI') {
-            steps {
-                echo 'Verifying Salesforce CLI installation...'
-                sh '''sf --version'''
-            }
-        }
+        echo 'Verifying Salesforce CLI installation...'
+        sh '''sf --version'''
+    }
 
-
-    // -------------------------------------------------------------------------
-    // Run all the enclosed stages with access to the Salesforce
-    // JWT key credentials.
-    // -------------------------------------------------------------------------
-    
-    
+    stage('Authenticate to Salesforce') {
+        echo 'Authenticating to Salesforce org using JWT...'
+        sh '''
+            sf org login jwt \
+            --client-id "$SF_CLIENT_ID" \
+            --jwt-key-file "$SF_JWT_KEY" \
+            --username "$SF_USERNAME" \
+            --instance-url "$SF_INSTANCE_URL" \
+            --alias ci-org \
+            --set-default
+        '''
+    }
 }
