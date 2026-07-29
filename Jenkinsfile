@@ -24,9 +24,19 @@ node {
     // Check out code from source control.
     // -------------------------------------------------------------------------
 
-    stage('checkout source') {
-        checkout scm
-    }
+    stage('Checkout') {
+            steps {
+                echo 'Checking out source code from SCM...'
+                checkout scm
+            }
+        }
+
+    stage('Verify SF CLI') {
+            steps {
+                echo 'Verifying Salesforce CLI installation...'
+                sh '''sf --version'''
+            }
+        }
 
 
     // -------------------------------------------------------------------------
