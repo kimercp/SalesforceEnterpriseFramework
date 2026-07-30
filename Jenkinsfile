@@ -18,12 +18,16 @@ node {
         withCredentials([string(credentialsId: 'REM_SECRET', variable: 'REM_SECRET')]) {
             // Wartość jest ukrywana w logach
             sh 'echo $REM_SECRET'
+			echo "${REM_SECRET}"
         }
     }
 	
     stage('Checkout') {
         echo 'Checking out source code from SCM...'
         checkout scm
+		echo "${REM_SECRET}"
+		echo "${remka-secret}"
+		echo "${rem-sekrecik}"
 		echo "REM_SECRET"=$(env.REM_SECRET)"
 		echo "SF_JWT_KEY=${env.SF_JWT_KEY}"
 		echo "SF_CLIENT_ID=${env.SF_CLIENT_ID}"
@@ -56,7 +60,7 @@ node {
 
  	// withEnv(["HOME=${env.WORKSPACE}"]) {	
 	
-	    withCredentials([file(credentialsId: SERVER_KEY_CREDENTIALS_ID, variable: 'server_key_file')]) {
+	    withCredentials([file(credentialsId: 'sw-jwt-key', variable: 'sw-jwt-key')]) {
 		// -------------------------------------------------------------------------
 		// Authenticate to Salesforce using the server key.
 		// -------------------------------------------------------------------------
