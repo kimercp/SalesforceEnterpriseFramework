@@ -10,17 +10,19 @@ node {
     def SERVER_KEY_CREDENTIALS_ID=env.SF_JWT_KEY
     def DEPLOYDIR='src'
     def TEST_LEVEL='RunLocalTests'
-    def SF_INSTANCE_URL = env.SF_INSTANCE_URL ?: "https://test.salesforce.com"
+//    def SF_INSTANCE_URL = env.SF_INSTANCE_URL ?: "https://test.salesforce.com"
+
+	def sf-instance-urlek=${SF_INSTANCE_URL}  ?: "https://test.salesforce.com"
 
     def toolbelt = tool 'toolbelt'
 	
-	stage('Użycie sekretu') {
-        withCredentials([string(credentialsId: 'REM_SECRET', variable: 'REM_SECRET')]) {
-            // Wartość jest ukrywana w logach
-            sh 'echo $REM_SECRET'
-			echo "${REM_SECRET}"
-        }
-    }
+	//stage('Użycie sekretu') {
+   //     withCredentials([string(credentialsId: 'REM_SECRET', variable: 'REM_SECRET')]) {
+   //         // Wartość jest ukrywana w logach
+  //          sh 'echo $REM_SECRET'
+//			echo "${REM_SECRET}"
+ //       }
+ //   }
 	
     stage('Checkout') {
         echo 'Checking out source code from SCM...'
@@ -36,6 +38,11 @@ node {
     }
 
 	stage('Validate Env') {
+	echo "olej"
+		echo "${SF_INSTANCE_URL}"
+		echo "${sf-instance-urlek}"
+		echo ${sf-instance-urlek}
+		echo "po wszystkim"
         def missing = []
         if (!SF_CONSUMER_KEY)          missing << 'SF_CLIENT_ID'
         if (!SF_USERNAME)              missing << 'SF_USERNAME'
