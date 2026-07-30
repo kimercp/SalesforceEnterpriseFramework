@@ -28,11 +28,11 @@ node {
 		echo "${REM_SECRET}"
 		echo "${remka-secret}"
 		echo "${rem-sekrecik}"
-		echo "REM_SECRET"=$(env.REM_SECRET)"
-		echo "SF_JWT_KEY=${env.SF_JWT_KEY}"
-		echo "SF_CLIENT_ID=${env.SF_CLIENT_ID}"
-		echo "SF_USERNAME=${env.SF_USERNAME}"
-		echo "SF_INSTANCE_URL=${env.SF_INSTANCE_URL}"
+		//echo "REM_SECRET"=$(env.REM_SECRET)"
+		//echo "SF_JWT_KEY=${env.SF_JWT_KEY}"
+		//echo "SF_CLIENT_ID=${env.SF_CLIENT_ID}"
+		//echo "SF_USERNAME=${env.SF_USERNAME}"
+		//echo "SF_INSTANCE_URL=${env.SF_INSTANCE_URL}"
     }
 
 	stage('Validate Env') {
