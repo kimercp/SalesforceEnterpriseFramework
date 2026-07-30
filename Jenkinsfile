@@ -4,6 +4,7 @@ import groovy.json.JsonSlurperClassic
 
 node {
 
+	// def REM_SECRET=env.REM_SECRET
     def SF_CONSUMER_KEY=env.SF_CLIENT_ID
     def SF_USERNAME=env.SF_USERNAME
     def SERVER_KEY_CREDENTIALS_ID=env.SF_JWT_KEY
@@ -12,10 +13,18 @@ node {
     def SF_INSTANCE_URL = env.SF_INSTANCE_URL ?: "https://test.salesforce.com"
 
     def toolbelt = tool 'toolbelt'
-
+	
+	stage('Użycie sekretu') {
+        withCredentials([string(credentialsId: 'REM_SECRET', variable: 'REM_SECRET')]) {
+            // Wartość jest ukrywana w logach
+            sh 'echo $REM_SECRET'
+        }
+    }
+	
     stage('Checkout') {
         echo 'Checking out source code from SCM...'
         checkout scm
+		echo "REM_SECRET"=$(env.REM_SECRET)"
 		echo "SF_JWT_KEY=${env.SF_JWT_KEY}"
 		echo "SF_CLIENT_ID=${env.SF_CLIENT_ID}"
 		echo "SF_USERNAME=${env.SF_USERNAME}"
