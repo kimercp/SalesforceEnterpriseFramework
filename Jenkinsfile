@@ -12,7 +12,8 @@ node {
     def TEST_LEVEL='RunLocalTests'
 //    def SF_INSTANCE_URL = env.SF_INSTANCE_URL ?: "https://test.salesforce.com"
 
-	def sf-instance-urlek=${SF_INSTANCE_URL}  ?: "https://test.salesforce.com"
+	def sfInstanceUrl = env.SF_INSTANCE_URL ?: "https://test.salesforce.com"
+                    
 
     def toolbelt = tool 'toolbelt'
 	
@@ -27,6 +28,8 @@ node {
     stage('Checkout') {
         echo 'Checking out source code from SCM...'
         checkout scm
+		echo "Using Salesforce instance: ${sfInstanceUrl}"
+		echo "po instancji"
 		echo "${REM_SECRET}"
 		echo "${remka-secret}"
 		echo "${rem-sekrecik}"
