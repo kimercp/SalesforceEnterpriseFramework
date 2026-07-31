@@ -30,11 +30,8 @@ node {
 
 			println rc
 			
-    		rmsg = bat returnStdout: true, script: "\"${toolbelt}\"sf project deploy start --target-org ${HUB_ORG}"
-			  
-            printf rmsg
-            println('Hello from a Job DSL script!')
-            println(rmsg)
+    		bat returnStdout: true, script: "\"${toolbelt}\"sf project deploy start --target-org ${HUB_ORG}"
+
         }
     }
 }
